@@ -27,20 +27,22 @@ public class Student {
     @Column(name = "SECOND_NAME")
     private String secondName;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY,
+            optional = false)
 //    @MapsId
     @JoinColumn(name = "PASSPORT_ID", referencedColumnName = "ID")
     private Passport passport;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            optional = false)
     @JoinColumn(name = "GRADE_ID", referencedColumnName = "ID")
     private Grade grade;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
     @JoinColumn(name = "HOME_ADDRESS_ID", referencedColumnName = "ID")
     private HomeAddress homeAddress;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
     @JoinColumn(name = "STUDENT_GROUP_ID", referencedColumnName = "ID")
     private StudentGroup studentGroup;
 
@@ -58,5 +60,19 @@ public class Student {
     public void removeScientificPublication(ScientificPublication scientificPublication) {
         scientificPublications.remove(scientificPublication);
         scientificPublication.setStudent(null);
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", passport=" + passport +
+                ", grade=" + grade +
+                ", homeAddress=" + homeAddress +
+                ", studentGroup=" + studentGroup +
+                ", scientificPublications=" + scientificPublications +
+                '}';
     }
 }
