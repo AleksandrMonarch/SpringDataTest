@@ -12,11 +12,15 @@ import javax.persistence.*;
 @Getter
 public class Passport {
 
+//    @Id
+//    @GeneratedValue(generator = "system-uuid")
+//    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+//    @Column(name = "ID")
+//    private String id;
+
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    @Column(name = "ID")
-    private String id;
+    @GeneratedValue
+    private Long id;
 
     @Column(name = "PASSPORT_NUMBER")
     private Long passportNumber;

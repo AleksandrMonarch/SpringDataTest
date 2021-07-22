@@ -30,7 +30,7 @@ public class ScientificPublication {
     @Column(name = "PUBLICATION_THEME")
     private String publicationTheme;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinColumn(name = "STUDENT_ID", referencedColumnName = "ID")
     private Student student;
 }

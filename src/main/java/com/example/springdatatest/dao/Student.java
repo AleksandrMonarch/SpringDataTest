@@ -15,11 +15,15 @@ import java.util.Objects;
 @Getter
 public class Student {
 
+//    @Id
+//    @GeneratedValue(generator = "system-uuid")
+//    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+//    @Column(name = "ID")
+//    private String id;
+
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    @Column(name = "ID")
-    private String id;
+    @GeneratedValue
+    private Long id;
 
     @Column(name = "FIRST_NAME")
     private String firstName;
@@ -27,32 +31,31 @@ public class Student {
     @Column(name = "SECOND_NAME")
     private String secondName;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY,
-            optional = false)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 //    @MapsId
     @JoinColumn(name = "PASSPORT_ID", referencedColumnName = "ID")
     private Passport passport;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-            optional = false)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY/*,
+            optional = false*/)
     @JoinColumn(name = "GRADE_ID", referencedColumnName = "ID")
     private Grade grade;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
+    @ManyToOne( cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY/*, optional = false*/)
     @JoinColumn(name = "HOME_ADDRESS_ID", referencedColumnName = "ID")
     private HomeAddress homeAddress;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY/*, optional = false*/)
     @JoinColumn(name = "STUDENT_GROUP_ID", referencedColumnName = "ID")
     private StudentGroup studentGroup;
 
-    @OneToMany(mappedBy = "student", cascade = {CascadeType.PERSIST, CascadeType.MERGE,})
-    private List<ScientificPublication> scientificPublications;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER, mappedBy = "student")
+    private List<ScientificPublication> scientificPublications = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "students", cascade = CascadeType.PERSIST)
+    private List<Course> courses = new ArrayList<>();
 
     public void addScientificPublication(ScientificPublication scientificPublication) {
-        if (Objects.isNull(scientificPublications)) {
-            scientificPublications = new ArrayList<>();
-        }
         scientificPublications.add(scientificPublication);
         scientificPublication.setStudent(this);
     }
@@ -65,14 +68,10 @@ public class Student {
     @Override
     public String toString() {
         return "Student{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", secondName='" + secondName + '\'' +
                 ", passport=" + passport +
-                ", grade=" + grade +
-                ", homeAddress=" + homeAddress +
-                ", studentGroup=" + studentGroup +
-                ", scientificPublications=" + scientificPublications +
                 '}';
     }
 }

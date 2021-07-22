@@ -15,11 +15,15 @@ import java.util.Objects;
 @Setter
 public class HomeAddress {
 
+//    @Id
+//    @GeneratedValue(generator = "system-uuid")
+//    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+//    @Column(name = "ID")
+//    private String id;
+
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    @Column(name = "ID")
-    private String id;
+    @GeneratedValue
+    private Long id;
 
     @Column(name = "CITY", nullable = false)
     private String city;
@@ -30,8 +34,8 @@ public class HomeAddress {
     @Column(name = "FLAT", nullable = false)
     private Long flat;
 
-    @OneToMany(mappedBy = "homeAddress",fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.REMOVE})
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REMOVE}, fetch = FetchType.LAZY, mappedBy = "homeAddress")
     private List<Student> students;
 
     public void addStudent(Student student) {
@@ -45,5 +49,15 @@ public class HomeAddress {
     public void removeStudent(Student student) {
         students.remove(student);
         student.setHomeAddress(null);
+    }
+
+    @Override
+    public String toString() {
+        return "HomeAddress{" +
+                "id='" + id + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", flat=" + flat +
+                '}';
     }
 }

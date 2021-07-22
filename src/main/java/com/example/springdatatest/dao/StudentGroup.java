@@ -27,13 +27,11 @@ public class StudentGroup {
     @Column(name = "GROUP_DESCRIPTION")
     private String groupDescription;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    private List<Student> students;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY,
+            mappedBy = "studentGroup")
+    private List<Student> students = new ArrayList<>();
 
     public void addStudent(Student student) {
-        if (Objects.isNull(students)) {
-            students = new ArrayList<>();
-        }
         students.add(student);
         student.setStudentGroup(this);
     }
